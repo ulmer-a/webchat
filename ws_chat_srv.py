@@ -30,7 +30,7 @@ async def chat_server(websocket, path):
                 client_list.remove(websocket)
             break
 
-if len(sys.argv[0]) < 3:
+if len(sys.argv) < 3:
     print("usage: wschatsrv [cert_chain] [cert_key]")
     exit(1)
 
