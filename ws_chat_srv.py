@@ -3,6 +3,8 @@
 import asyncio
 import websockets
 import threading
+import ssl
+import sys
 
 client_list = []
 client_list_lock = threading.Lock()
@@ -28,7 +30,17 @@ async def chat_server(websocket, path):
                 client_list.remove(websocket)
             break
 
-ws = websockets.serve(chat_server, "0.0.0.0", 7123)
+if len(sys.argv[0]) < 3:
+    print("usage: wschatsrv [cert_chain] [cert_key]")
+    exit(1)
+
+ssl_cert_chain = sys.argv[1]
+ssl_cert_key = sys.argv[2]
+
+ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+ssl_cert = ssl_cert_chain
+ssl_context.load_cert_chain(ssl_cert, keyfile=ssl_cert_key)
+ws = websockets.serve(chat_server, "0.0.0.0", 7123, ssl=ssl_context)
 
 print("starting websocket server")
 asyncio.get_event_loop().run_until_complete(ws)
