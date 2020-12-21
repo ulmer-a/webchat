@@ -5,7 +5,7 @@
         <script>
             let webChat;
             let myName;
-            let webchatServer = "ws://192.168.0.108:7123";
+            let webchatServer = "wss://" + location.hostname + ":7123";
 
             function on_load() {
                 document.getElementById('myname').onkeyup = function(event) {
@@ -23,7 +23,7 @@
                 inboxWrite("webchat", "connecting to " + webchatServer);
                 webChat = new WebSocket(webchatServer);
                 webChat.onopen = function(event) {
-                    inboxWrite("webchat", "connected!");
+                    inboxWrite("webchat", "connected [SSL]");
                     send("joined!");
                 };
 
